@@ -51,10 +51,6 @@ const DomainLookupForm = () => {
           Get Info
         </button>
       </div>
-
-      <h2>{domain}</h2>
-
-      <div>{hostResults ? <h1>{hostResults.domain}</h1> : null}</div>
     </>
   )
 }
