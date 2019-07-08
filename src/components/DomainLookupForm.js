@@ -8,8 +8,12 @@ import { LocalStorageContext } from '../contexts/LocalStorageContext'
 
 const DomainLookupForm = () => {
   const { domain } = useContext(domainLookupContext)
-  const { addHostResults, toggleHasResults } = useContext(hostResultsContext)
-  const { updateHostResultsInLocalStorage } = useContext(LocalStorageContext)
+  const { addHostResults, toggleHasResults, updateResultsHistory } = useContext(
+    hostResultsContext
+  )
+  const { getLocalStorageItem, updateHostResultsInLocalStorage } = useContext(
+    LocalStorageContext
+  )
 
   const getHostInformation = domain => {
     axios
@@ -32,6 +36,9 @@ const DomainLookupForm = () => {
             domain,
             res.data.results
           )
+
+          let updatedLocalStorageResults = getLocalStorageItem(`results`)
+          updateResultsHistory(updatedLocalStorageResults)
 
           addHostResults(id, createdAt, domain, res.data.results)
           toggleHasResults()

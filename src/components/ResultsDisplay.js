@@ -9,14 +9,13 @@ const ResultsDisplay = () => {
       {hasResults ? (
         <>
           <h2>{hostResults.domain}</h2>
-          <code>{hostResults.id}</code>
           <div>
             {hostResults.results.map(result => (
               <ul key={result.ip}>
-                <li>{result.ip}</li>
-                <li>{result.isp_id}</li>
-                <li>{result.isp_name}</li>
-                <li>{result.type}</li>
+                <li>IP: {result.ip}</li>
+                <li>ISP ID: {result.isp_id}</li>
+                <li>ISP Name: {result.isp_name}</li>
+                <li>Type: {result.type}</li>
               </ul>
             ))}
           </div>
