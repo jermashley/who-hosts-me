@@ -1,11 +1,11 @@
-import React, { createContext, useState, useContext } from 'react'
+import React, { createContext } from 'react'
 import uuid from 'uuidv4'
 
 const LocalStorageContext = createContext({})
 
 const LocalStorageContextProvider = props => {
   const existsInLocalStorage = key => {
-    let doesExistsInLocalStorage = localStorage.getItem(key) !== null && true
+    let doesExistsInLocalStorage = localStorage.getItem(key) !== null
 
     return doesExistsInLocalStorage
   }
