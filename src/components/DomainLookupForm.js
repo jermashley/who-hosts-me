@@ -20,7 +20,9 @@ const DomainLookupForm = () => {
         },
       })
       .then(res => {
-        if (res.data.result.code === 200) {
+        let responseCode = res.data.result.code
+
+        if (responseCode === 200) {
           let id = uuid()
           let createdAt = new Date()
 
