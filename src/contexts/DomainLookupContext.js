@@ -5,8 +5,9 @@ const domainLookupContext = createContext({})
 const DomainLookupContextProvider = props => {
   const [domain, setDomain] = useState(``)
 
-  const addDomain = host => {
-    setDomain(host)
+  const addDomain = domain => {
+    let cleanDomain = domain.replace(/^\/\/|^.*?:(\/\/)?/, ``)
+    setDomain(cleanDomain)
   }
 
   return (
