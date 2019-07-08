@@ -6,7 +6,7 @@ const ResultsDisplay = () => {
 
   useEffect(() => {
     console.log(hostResults)
-  }, hostResults)
+  })
 
   return <>{hostResults ? <code>{hostResults.domain}</code> : null}</>
 }
