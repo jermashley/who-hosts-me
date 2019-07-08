@@ -1,10 +1,11 @@
 import React, { createContext, useState } from 'react'
 import uuid from 'uuidv4'
 
-const hostResultsContext = createContext()
+const hostResultsContext = createContext({})
 
 const HostResultsContextProvider = props => {
   const [hostResults, setHostResults] = useState({})
+  const [hasResults, setHasResults] = useState(false)
 
   const addHostResults = (id, date, domain, results) => {
     setHostResults({
@@ -15,11 +16,15 @@ const HostResultsContextProvider = props => {
     })
   }
 
+  const toggleHasResults = () => setHasResults(!hasResults)
+
   return (
     <hostResultsContext.Provider
       value={{
         hostResults,
         addHostResults,
+        hasResults,
+        toggleHasResults,
       }}
     >
       {props.children}

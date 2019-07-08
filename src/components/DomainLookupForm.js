@@ -8,7 +8,7 @@ import { LocalStorageContext } from '../contexts/LocalStorageContext'
 
 const DomainLookupForm = () => {
   const { domain } = useContext(domainLookupContext)
-  const { hostResults, addHostResults } = useContext(hostResultsContext)
+  const { addHostResults, toggleHasResults } = useContext(hostResultsContext)
   const { updateHostResultsInLocalStorage } = useContext(LocalStorageContext)
 
   const getHostInformation = domain => {
@@ -34,6 +34,7 @@ const DomainLookupForm = () => {
           )
 
           addHostResults(id, createdAt, domain, res.data.results)
+          toggleHasResults()
         } else {
           console.log(`There was an error.`)
         }
