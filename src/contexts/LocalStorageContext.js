@@ -18,12 +18,9 @@ const LocalStorageContextProvider = props => {
     localStorage.setItem(key, JSON.stringify(val))
   }
 
-  const updateHostResultsInLocalStorage = (id, date, domain, results) => {
+  const updateHostResultsInLocalStorage = obj => {
     let hostResults = {
-      id: id,
-      createdAt: date,
-      domain: domain,
-      results: results,
+      ...obj,
     }
 
     let resultsStorage

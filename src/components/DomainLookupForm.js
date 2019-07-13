@@ -8,12 +8,17 @@ import { LocalStorageContext } from '../contexts/LocalStorageContext'
 
 const DomainLookupForm = () => {
   const { domain } = useContext(domainLookupContext)
-  const { addHostResults, toggleHasResults, updateResultsHistory } = useContext(
+  const { hostResults, setHostResults, toggleHasResults } = useContext(
     hostResultsContext
   )
-  const { getLocalStorageItem, updateHostResultsInLocalStorage } = useContext(
-    LocalStorageContext
-  )
+
+  function ResultObject (id, createdAt, domain, results, favicon) {
+    this.id = id
+    this.createdAt = createdAt
+    this.domain = domain
+    this.results = results
+    this.favicon = favicon
+  }
 
   const getHostInformation = domain => {
     axios
@@ -29,18 +34,27 @@ const DomainLookupForm = () => {
         if (responseCode === 200) {
           let id = uuid()
           let createdAt = new Date()
+          let results = res.data.results
+          let favicon
 
-          updateHostResultsInLocalStorage(
-            id,
-            createdAt,
-            domain,
-            res.data.results
-          )
+          axios
+            .get(`http://favicongrabber.com/api/grab/${ domain }`, {
+              params: {
+                pretty: true,
+              },
+            })
+            .then(res => {
+              favicon = res.data.icons[0].src
+            })
 
-          let updatedLocalStorageResults = getLocalStorageItem(`results`)
-          updateResultsHistory(updatedLocalStorageResults)
+          setHostResults({
+            id: id,
+            createdAt: createdAt,
+            domain: domain,
+            results: results,
+            favicon: favicon,
+          })
 
-          addHostResults(id, createdAt, domain, res.data.results)
           toggleHasResults()
         } else {
           console.log(`There was an error.`)
@@ -49,16 +63,17 @@ const DomainLookupForm = () => {
       .catch(e => {
         console.log(e)
       })
+
+    // let finalResults = new ResultObject(...hostResults)
+    // console.log(finalResults)
   }
 
   return (
     <>
-      <div>
-        <DomainInput />
-        <button role='button' onClick={() => getHostInformation(domain)}>
-          Get Info
-        </button>
-      </div>
+      <DomainInput />
+      <button role='button' onClick={() => getHostInformation(domain)}>
+        Get Info
+      </button>
     </>
   )
 }

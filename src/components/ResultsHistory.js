@@ -3,10 +3,18 @@ import { LocalStorageContext } from '../contexts/LocalStorageContext'
 import { hostResultsContext } from '../contexts/HostResultsContext'
 
 const ResultsHistory = () => {
-  const { existsInLocalStorage } = useContext(LocalStorageContext)
-  const { resultsHistory } = useContext(hostResultsContext)
+  const { existsInLocalStorage, getLocalStorageItem } = useContext(
+    LocalStorageContext
+  )
+  const { resultsHistory, updateResultsHistory } = useContext(
+    hostResultsContext
+  )
 
   const showHistory = existsInLocalStorage(`results`)
+
+  useEffect(() => {
+    updateResultsHistory(getLocalStorageItem(`results`))
+  }, [])
 
   let resultsHistorySorted = resultsHistory
     ? resultsHistory.sort((a, b) => {

@@ -1,8 +1,23 @@
 import React, { useContext, useEffect } from 'react'
 import { hostResultsContext } from '../contexts/HostResultsContext'
+import { LocalStorageContext } from '../contexts/LocalStorageContext'
 
 const ResultsDisplay = () => {
-  const { hostResults, hasResults } = useContext(hostResultsContext)
+  const { hostResults, updateResultsHistory, hasResults } = useContext(
+    hostResultsContext
+  )
+  const { updateHostResultsInLocalStorage, getLocalStorageItem } = useContext(
+    LocalStorageContext
+  )
+
+  useEffect(() => {
+    updateResultsHistory(getLocalStorageItem(`results`))
+  }, [])
+
+  const handleClick = obj => {
+    updateHostResultsInLocalStorage(obj)
+    updateResultsHistory(getLocalStorageItem(`results`))
+  }
 
   return (
     <>
@@ -19,6 +34,8 @@ const ResultsDisplay = () => {
               </ul>
             ))}
           </div>
+
+          <button onClick={() => handleClick(hostResults)}>Save Result</button>
         </>
       ) : null}
     </>
