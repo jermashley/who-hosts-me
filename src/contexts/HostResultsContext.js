@@ -1,25 +1,17 @@
 import React, { createContext, useState, useEffect } from 'react'
-import uuid from 'uuidv4'
 
 const hostResultsContext = createContext({})
 
 const HostResultsContextProvider = props => {
-  const [hostResults, setHostResults] = useState({})
+  const [hostResults, setHostResults] = useState({
+    id: null,
+    createdAt: null,
+    domain: null,
+    results: [],
+    favicon: null,
+  })
   const [resultsHistory, setResultsHistory] = useState(null)
   const [hasResults, setHasResults] = useState(false)
-
-  useEffect(() => {
-    setResultsHistory(JSON.parse(localStorage.getItem(`results`)))
-  }, [])
-
-  const addHostResults = (id, date, domain, results) => {
-    setHostResults({
-      id: id,
-      createdAt: date,
-      domain: domain,
-      results: results,
-    })
-  }
 
   const updateResultsHistory = results => {
     setResultsHistory(results)
@@ -31,7 +23,7 @@ const HostResultsContextProvider = props => {
     <hostResultsContext.Provider
       value={{
         hostResults,
-        addHostResults,
+        setHostResults,
         hasResults,
         toggleHasResults,
         resultsHistory,
