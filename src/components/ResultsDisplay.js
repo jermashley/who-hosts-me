@@ -15,8 +15,18 @@ const ResultsDisplay = () => {
   }, [])
 
   const handleClick = obj => {
-    updateHostResultsInLocalStorage(obj)
-    updateResultsHistory(getLocalStorageItem(`results`))
+    let resultsHistory = getLocalStorageItem(`results`)
+    let historyHasResults = !!resultsHistory
+
+    if (
+      historyHasResults &&
+      resultsHistory.filter(item => item.id === obj.id).length === 1
+    ) {
+      console.log(`That already exists`)
+    } else {
+      updateHostResultsInLocalStorage(obj)
+      updateResultsHistory(getLocalStorageItem(`results`))
+    }
   }
 
   return (
