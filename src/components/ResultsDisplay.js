@@ -23,7 +23,18 @@ const ResultsDisplay = () => {
     <>
       {hasResults ? (
         <>
-          <h2>{hostResults.domain}</h2>
+          <h2>
+            <img
+              src={hostResults.favicon}
+              alt=''
+              style={{
+                width: `32px`,
+                height: `32px`,
+                objectFit: `contain`,
+              }}
+            />
+            {hostResults.domain}
+          </h2>
           <div>
             {hostResults.results.map(result => (
               <ul key={result.ip}>

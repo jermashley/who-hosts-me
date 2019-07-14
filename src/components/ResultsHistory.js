@@ -41,7 +41,18 @@ const ResultsHistory = () => {
               borderRadius: `4px`,
             }}
           >
-            <h2>{item.domain}</h2>
+            <h2>
+              <img
+                src={item.favicon}
+                alt=''
+                style={{
+                  width: `32px`,
+                  height: `32px`,
+                  objectFit: `contain`,
+                }}
+              />
+              {item.domain}
+            </h2>
             <div>
               {item.results.map(result => (
                 <ul key={result.ip}>
