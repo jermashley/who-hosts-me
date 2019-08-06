@@ -17,7 +17,7 @@ const HostResultsContextProvider = props => {
     setResultsHistory(results)
   }
 
-  const toggleHasResults = () => setHasResults(!hasResults)
+  const toggleHasResults = value => setHasResults(value)
 
   return (
     <hostResultsContext.Provider

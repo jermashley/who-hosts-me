@@ -12,7 +12,8 @@ const ResultsDisplay = () => {
 
   useEffect(() => {
     updateResultsHistory(getLocalStorageItem(`results`))
-  }, [])
+    console.log(hostResults)
+  }, [hostResults])
 
   const handleClick = obj => {
     let resultsHistory = getLocalStorageItem(`results`)

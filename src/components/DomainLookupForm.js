@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import uuid from 'uuidv4'
 import { domainLookupContext } from '../contexts/DomainLookupContext'
@@ -9,6 +9,7 @@ import { LocalStorageContext } from '../contexts/LocalStorageContext'
 const DomainLookupForm = () => {
   const { domain } = useContext(domainLookupContext)
   const { setHostResults, toggleHasResults } = useContext(hostResultsContext)
+  const [button, setButton] = useState(false)
 
   const getHostResults = async domain => {
     let results = await axios
@@ -29,28 +30,13 @@ const DomainLookupForm = () => {
   }
 
   const getDomainFavicon = async domain => {
-    let faviconResults = await axios.get(
-      `${ process.env.GATSBY_FAVICON_API_URL }/${ domain }`,
-      {
-        params: {
-          pretty: true,
-        },
-      }
-    )
-
-    let filteredResults = faviconResults.data.icons.filter(icon =>
-      icon.sizes ? icon.sizes : false
-    )
-
-    let sortedBySize = filteredResults.sort(
-      (a, b) =>
-        parseInt(b.sizes.substring(0, 3)) - parseInt(a.sizes.substring(0, 3))
-    )
-
-    return sortedBySize[0] ? sortedBySize[0].src : null
+    let favicon = await `https://api.faviconkit.com/${ domain }/32`
+    return favicon
   }
 
   const getHostInformation = domain => {
+    setButton(true)
+
     Promise.all([getHostResults(domain), getDomainFavicon(domain)]).then(
       res => {
         let id = uuid()
@@ -66,56 +52,24 @@ const DomainLookupForm = () => {
           favicon: favicon,
         })
 
-        toggleHasResults()
+        toggleHasResults(true)
+
+        setTimeout(() => {
+          setButton(false)
+        }, 12500)
       }
     )
-
-    // axios
-    //   .get(process.env.GATSBY_API_URL, {
-    //     params: {
-    //       key: process.env.GATSBY_API_KEY,
-    //       url: domain,
-    //     },
-    //   })
-    //   .then(res => {
-    //     let responseCode = res.data.result.code
-    //     if (responseCode === 200) {
-    //       let id = uuid()
-    //       let createdAt = new Date()
-    //       let results = res.data.results
-    //       let favicon
-    //       axios
-    //         .get(`http://favicongrabber.com/api/grab/${ domain }`, {
-    //           params: {
-    //             pretty: true,
-    //           },
-    //         })
-    //         .then(res => {
-    //           favicon = res.data.icons[0].src
-    //         })
-    //       setHostResults({
-    //         id: id,
-    //         createdAt: createdAt,
-    //         domain: domain,
-    //         results: results,
-    //         favicon: favicon,
-    //       })
-    //       toggleHasResults()
-    //     } else {
-    //       console.log(`There was an error.`)
-    //     }
-    //   })
-    //   .catch(e => {
-    //     console.log(e)
-    //   })
-    // let finalResults = new ResultObject(...hostResults)
-    // console.log(finalResults)
   }
 
   return (
     <>
       <DomainInput />
-      <button role='button' onClick={() => getHostInformation(domain)}>
+      <button
+        role='button'
+        type='button'
+        disabled={button}
+        onClick={() => getHostInformation(domain)}
+      >
         Get Info
       </button>
     </>
